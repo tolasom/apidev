@@ -6,9 +6,9 @@ const FilePath = new Schema({
         type: String,
         required: [true, 'name is required']
     },
-    date : {
+    timeStamp : {
         type: String,
-        required: [true, 'date is required']
+        required: [true, 'timeStamp is required']
     },
     hostNumber : {
         type: Number,
@@ -34,7 +34,7 @@ FilePath.statics.create = (obj)=>{
         console.log('Store file object', obj)
         const filePath = new Self({
             name: obj.name,
-            date : obj.date,
+            timeStamp : obj.timeStamp,
             hostNumber: obj.hostNumber,
             destinationNumber: obj.destinationNumber,
             lastModified: obj.lastModified,
@@ -47,13 +47,13 @@ FilePath.statics.create = (obj)=>{
     })
 }
 
-FilePath.statics.get = (name,date,hostNumber,destinationNumber,lastModified,size)=>{
+FilePath.statics.get = (name,timeStamp,hostNumber,destinationNumber,lastModified,size)=>{
     return new Promise((resolve,reject)=>{
-        console.log('Get file object : '+'{\n'+'\n Name:\t'+ name+',\n Date:\t'+ date +',\n Host Number:\t'+ hostNumber+',\n Destination Number:\t'+ destinationNumber+',\n Last Modified:\t'+ lastModified+',\n Size:\t'+ size +'\n}')
-        if(date){ 
+        console.log('Get file object : '+'{\n'+'\n Name:\t'+ name+',\n Date:\t'+ timeStamp +',\n Host Number:\t'+ hostNumber+',\n Destination Number:\t'+ destinationNumber+',\n Last Modified:\t'+ lastModified+',\n Size:\t'+ size +'\n}')
+        if(timeStamp){ 
             Self.find({
                 name: name,
-                date: date,
+                timeStamp: timeStamp,
                 hostNumber: hostNumber,
                 destinationNumber: destinationNumber,
                 lastModified: lastModified,
@@ -66,7 +66,7 @@ FilePath.statics.get = (name,date,hostNumber,destinationNumber,lastModified,size
         else{
             Self.find({
                 name: name,
-                date: date,
+                timeStamp: timeStamp,
                 hostNumber: hostNumber,
                 destinationNumber: destinationNumber,
                 lastModified: lastModified,

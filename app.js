@@ -55,16 +55,16 @@ const metaData = {
 }
 
 //upload script (work)
-// fs.readdir(filepath, (err, files)=>{
-//     if (err) {return err}
+fs.readdir(filepath, (err, files)=>{
+    if (err) {return err}
     
-//     files.forEach((file)=>{
-//         minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
-//             if(err) { return console.log(err)}
-//             console.log('done : '+ file)
-//         })
-//     })
-// })
+    files.forEach((file)=>{
+        minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
+            if(err) { return console.log(err)}
+            console.log('done : '+ file)
+        })
+    })
+})
 
 // information script (work)
 // const listObj = minioClient.listObjects('khbucket','',true)
@@ -92,7 +92,7 @@ listObj.on('data',(obj)=>{
     if(spl){
         FilePath.create({
             name : namestr,
-            date : datestr,
+            timeStamp : datestr,
             destinationNumber : Desti,
             hostNumber : Host,
             lastModified : lastM,
