@@ -73,11 +73,11 @@ const minioClient = new Minio.Client({
 });
 
 /** filepath is where the file directory ready to be uploaded */
-// const filepath = '/home/tolasom/Desktop/apidev/audios/'
-// const metaData = { 
-//     'Content-Type' : 'application/octet-stream', 
-//     'Content-Length' : '1414' 
-// }
+const filepath = '/home/tolasom/Desktop/apidev/audios/'
+const metaData = { 
+    'Content-Type' : 'application/octet-stream'
+}
+
 
 //upload script (work)
 // fs.readdir(filepath, (err, files)=>{
@@ -91,6 +91,30 @@ const minioClient = new Minio.Client({
 //     })
 // })
 
+
+//upload script with id
+// fs.readdir(filepath, (err, files)=>{
+//     if (err) {return err}
+//     var item = 0
+//     files.forEach((IDGAF)=>{
+//         var str = IDGAF 
+//         while(item < 20){
+//             var file = str.replace(`.wav`,`${item}.wav`)
+//             minioClient.fPutObject('khbucket', file , filepath.concat(file), metaData, (err,stream)=>{
+//                 if(err) { return console.log(err)}
+//                 console.log('done : '+ res)
+//             })
+//             item++
+//         }
+
+
+       
+//     })
+// })
+
+
+
+
 // information script (work)
 // const listObj = minioClient.listObjects('khbucket','',true)
 // listObj.on('data',(obj)=>{
@@ -101,53 +125,53 @@ const minioClient = new Minio.Client({
 // })
 
 // slice object name 
-const listObj = minioClient.listObjects('khbucket','',true)
-listObj.on('data',(obj)=>{
-    var namestr = obj.name 
-    var sizeSave = obj.size
-    var lastM = obj.lastModified 
-    var arrayStr = namestr.replace(".wav","")
-    console.log(arrayStr)
-    var spl = arrayStr.split("_")
-    console.log(spl)
-    var datestr = spl[0]
-    var Desti = spl[1]
-    var Host = spl[2]
-    console.log('Name :\t'+namestr+'\n lastModified\t'+lastM+'\n Size:\t'+sizeSave+'\n'+'Date :\t'+datestr+'\n Destination:\t'+Desti+'\n Host:\t'+Host)
-    if(spl){
-        FilePath.create({
-            name : namestr,
-            timeStamp : datestr,
-            destinationNumber : Desti,
-            hostNumber : Host,
-            lastModified : lastM,
-            size : sizeSave
-        })
-        .then((data)=>{
-            console.log('success', data)
-            FilePath.get(namestr,
-                datestr,
-                Host,
-                Desti,
-                lastM,
-                sizeSave
-            ).then((doc)=>{
-                console.log(doc)
-            })
-            .catch(err=>{
-                console.log('error',err)
-            })
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-     }
+// const listObj = minioClient.listObjects('khbucket','',true)
+// listObj.on('data',(obj)=>{
+//     var namestr = obj.name 
+//     var sizeSave = obj.size
+//     var lastM = obj.lastModified 
+//     var arrayStr = namestr.replace(".wav","")
+//     console.log(arrayStr)
+//     var spl = arrayStr.split("_")
+//     console.log(spl)
+//     var datestr = spl[0]
+//     var Desti = spl[1]
+//     var Host = spl[2]
+//     console.log('Name :\t'+namestr+'\n lastModified\t'+lastM+'\n Size:\t'+sizeSave+'\n'+'Date :\t'+datestr+'\n Destination:\t'+Desti+'\n Host:\t'+Host)
+//     if(spl){
+//         FilePath.create({
+//             name : namestr,
+//             timeStamp : datestr,
+//             destinationNumber : Desti,
+//             hostNumber : Host,
+//             lastModified : lastM,
+//             size : sizeSave
+//         })
+//         .then((data)=>{
+//             console.log('success', data)
+//             FilePath.get(namestr,
+//                 datestr,
+//                 Host,
+//                 Desti,
+//                 lastM,
+//                 sizeSave
+//             ).then((doc)=>{
+//                 console.log(doc)
+//             })
+//             .catch(err=>{
+//                 console.log('error',err)
+//             })
+//         })
+//         .catch(err=>{
+//             console.log(err)
+//         })
+//      }
     
 
-})
-listObj.on('error',(e)=>{
-    console.log(e)
-})
+// })
+// listObj.on('error',(e)=>{
+//     console.log(e)
+// })
 
 
 app.get('/',(req,res)=>{
