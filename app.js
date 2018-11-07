@@ -72,24 +72,32 @@ const minioClient = new Minio.Client({
 
 });
 
+// const minioClient = new Minio.Client({
+//     endPoint: '35.237.227.234',
+//     port: 9180,
+//     useSSL: true,
+//     accessKey: 'DFTEWRXQTL2APKSWEGZB',
+//     secretKey: 'AeUFbv5s59975PeMfPgSCpZxtdkUIJGdx/nv0zyH'
+// });
+
 /** filepath is where the file directory ready to be uploaded */
-// const filepath = '/home/tolasom/Desktop/apidev/audios/'
-// const metaData = { 
-//     'Content-Type' : 'application/octet-stream', 
-//     'Content-Length' : '1414' 
-// }
+const filepath = '/home/tolasom/Desktop/apidev/audios/'
+const metaData = { 
+    'Content-Type' : 'application/octet-stream', 
+    'Content-Length' : '1414' 
+}
 
 //upload script (work)
-// fs.readdir(filepath, (err, files)=>{
-//     if (err) {return err}
+fs.readdir(filepath, (err, files)=>{
+    if (err) {return err}
     
-//     files.forEach((file)=>{
-//         minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
-//             if(err) { return console.log(err)}
-//             console.log('done : '+ file)
-//         })
-//     })
-// })
+    files.forEach((file)=>{
+        minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
+            if(err) { return console.log(err)}
+            console.log('done : '+ file)
+        })
+    })
+})
 
 // information script (work)
 // const listObj = minioClient.listObjects('khbucket','',true)
