@@ -12,29 +12,8 @@ const FilePath = require('./models/filepath.mod')
 
 //connect to mongo
 mongoose.Promise = global.Promise
-// const connectMongoDBWithInitialFailedRetry = ()=>{
-//     mongoose.connect(config.mongo.database, config.mongo.options)
-//     .then(()=>{
-//         console.log('success initial connection to db')
-//     }).catch(error=>{
-//         console.log('error connecting to DB' + error)
-//         mongoose.disconnect()
-//         setTimeout(connect,config.mongo.initialRetryTime)
-//     })
-// }
-// connectMongoDBWithInitialFailedRetry()
-// const mongoConnection = mongoose.connection
 
-// /**useNewUrlParser: true */
-
-// mongoConnection.on('connected',()=>{
-//     console.log('successs connected to mongoose')
-// })
-// mongoConnection.on('reconnected',()=>{
-//     console.log('reconnected')
-// })
-
-/**connect to mongo database if it fail to attemp */
+//connect to mongo database if it fail to attemp 
 const connectMongoDBWithInitialFailedRetry =()=>{
     mongoose.connect(config.mongo.database, {
         useNewUrlParser: true
