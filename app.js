@@ -11,7 +11,12 @@ const config = require('./config/database.config')
 const FilePath = require('./models/filepath.mod')
 
 mongoose.Promise = global.Promise
+<<<<<<< HEAD
 /**connect to mongo database if it fail to attemp */
+=======
+
+//connect to mongo database if it fail to attemp 
+>>>>>>> 0ef97a53cfc4ae383dad8223ad4e921dd9a4f8ec
 const connectMongoDBWithInitialFailedRetry =()=>{
     mongoose.connect(config.mongo.database, {
         useNewUrlParser: true
@@ -45,7 +50,16 @@ const minioClient = new Minio.Client({
     secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
 });
 
+// const minioClient = new Minio.Client({
+//     endPoint: '35.237.227.234',
+//     port: 9180,
+//     useSSL: true,
+//     accessKey: 'DFTEWRXQTL2APKSWEGZB',
+//     secretKey: 'AeUFbv5s59975PeMfPgSCpZxtdkUIJGdx/nv0zyH'
+// });
+
 /** filepath is where the file directory ready to be uploaded */
+<<<<<<< HEAD
 const filepath = './audios/'
 const metaData = { 
     'Content-Type' : 'application/octet-stream' 
@@ -54,6 +68,18 @@ const metaData = {
 //upload script (work)
 fs.readdir(filepath, (err, files)=>{
     if (err) {return err}
+=======
+const filepath = '/home/tolasom/Desktop/apidev/audios/'
+const metaData = { 
+    'Content-Type' : 'application/octet-stream', 
+    'Content-Length' : '1414' 
+}
+
+//upload script (work)
+fs.readdir(filepath, (err, files)=>{
+    if (err) {return err}
+    
+>>>>>>> 0ef97a53cfc4ae383dad8223ad4e921dd9a4f8ec
     files.forEach((file)=>{
         minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
             if(err) { return console.log(err)}
