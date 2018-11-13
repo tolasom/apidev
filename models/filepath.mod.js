@@ -6,37 +6,39 @@ const FilePath = new Schema({
         type: String,
         required: [true, 'name is required']
     },
-    timeStamp : {
+    CreationDate : {
         type: String,
         required: [true, 'timeStamp is required']
     },
-    hostNumber : {
+    Caller : {
         type: Number,
-        required: [true, 'hose number is required ']
+        required: [true, 'caller number is required ']
     },
-    destinationNumber : {
+    Callee : {
         type: Number,
-        required: [true, 'destination number is required ']
+        required: [true, 'callee number is required ']
 
     },
     lastModified : {
         type: String,
         required: [true, 'lastModified is required']
-    },
+    }
+    ,
     size: {
         type: Number,
         required: [true, 'size is required ']
     }
 })
 
+
 FilePath.statics.create = (obj)=>{
     return new Promise((resolve,reject)=>{
         console.log('Store file object', obj)
         const filePath = new Self({
             name: obj.name,
-            timeStamp : obj.timeStamp,
-            hostNumber: obj.hostNumber,
-            destinationNumber: obj.destinationNumber,
+            CreationDate : obj.CreationDate,
+            Caller: obj.Caller,
+            Callee: obj.Callee,
             lastModified: obj.lastModified,
             size: obj.size
         })
@@ -47,15 +49,15 @@ FilePath.statics.create = (obj)=>{
     })
 }
 
-FilePath.statics.get = (name,timeStamp,hostNumber,destinationNumber,lastModified,size)=>{
+FilePath.statics.get = (name ,CreationDate,Caller,Callee,lastModified,size)=>{
     return new Promise((resolve,reject)=>{
-        console.log('Get file object : '+'{\n'+'\n Name:\t'+ name+',\n Date:\t'+ timeStamp +',\n Host Number:\t'+ hostNumber+',\n Destination Number:\t'+ destinationNumber+',\n Last Modified:\t'+ lastModified+',\n Size:\t'+ size +'\n}')
-        if(timeStamp){ 
+        console.log('Get file object : '+'{\n'+'\n Name:\t'+ name+',\n CreationDate:\t'+ CreationDate +',\n Caller:\t'+ Caller+',\n Callee:\t'+ Callee+',\n Last Modified:\t'+ lastModified+ 'Size :'+size)
+        if(CreationDate){ 
             Self.find({
                 name: name,
-                timeStamp: timeStamp,
-                hostNumber: hostNumber,
-                destinationNumber: destinationNumber,
+                CreationDate: CreationDate,
+                Caller: Caller,
+                Callee: Callee,
                 lastModified: lastModified,
                 size: size
             }, (err,data)=>{
@@ -66,11 +68,11 @@ FilePath.statics.get = (name,timeStamp,hostNumber,destinationNumber,lastModified
         else{
             Self.find({
                 name: name,
-                timeStamp: timeStamp,
-                hostNumber: hostNumber,
-                destinationNumber: destinationNumber,
-                lastModified: lastModified,
-                size: size
+                CreationDate: CreationDate,
+                Caller: Caller,
+                Callee: Callee,
+                lastModified: lastModified
+                // size: size
             }, (err,data)=>{
                 if(err){return reject(err)}
                 return resolve(data)
@@ -78,4 +80,5 @@ FilePath.statics.get = (name,timeStamp,hostNumber,destinationNumber,lastModified
         }
     })
 }
+
 const Self = module.exports = mongoose.model('FilePath', FilePath)

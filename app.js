@@ -4,36 +4,13 @@ const Minio = require('minio')
 const BodyParser = require('body-parser')
 const fs = require('fs')
 const Promise = require('bluebird')
-const port = 8080, host = '127.0.0.1'
+const port = 8082, host = '127.0.0.1'
 
 const mongoose = require('mongoose')
 const config = require('./config/database.config')
 const FilePath = require('./models/filepath.mod')
 
-//connect to mongo
 mongoose.Promise = global.Promise
-// const connectMongoDBWithInitialFailedRetry = ()=>{
-//     mongoose.connect(config.mongo.database, config.mongo.options)
-//     .then(()=>{
-//         console.log('success initial connection to db')
-//     }).catch(error=>{
-//         console.log('error connecting to DB' + error)
-//         mongoose.disconnect()
-//         setTimeout(connect,config.mongo.initialRetryTime)
-//     })
-// }
-// connectMongoDBWithInitialFailedRetry()
-// const mongoConnection = mongoose.connection
-
-// /**useNewUrlParser: true */
-
-// mongoConnection.on('connected',()=>{
-//     console.log('successs connected to mongoose')
-// })
-// mongoConnection.on('reconnected',()=>{
-//     console.log('reconnected')
-// })
-
 /**connect to mongo database if it fail to attemp */
 const connectMongoDBWithInitialFailedRetry =()=>{
     mongoose.connect(config.mongo.database, {
@@ -56,9 +33,6 @@ mongoConnection.on('connected',()=>{
 mongoConnection.on('reconnected',()=>{
     console.log('reconnected')
 })
-
-
-
 app.use(BodyParser.urlencoded({ extended: true}))
 app.use(BodyParser.json())
 
@@ -69,27 +43,24 @@ const minioClient = new Minio.Client({
     useSSL: true,
     accessKey: 'Q3AM3UQ867SPQQA43P2F',
     secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
-
 });
 
 /** filepath is where the file directory ready to be uploaded */
-// const filepath = '/home/tolasom/Desktop/apidev/audios/'
-// const metaData = { 
-//     'Content-Type' : 'application/octet-stream', 
-//     'Content-Length' : '1414' 
-// }
-
+const filepath = './audios/'
+const metaData = { 
+    'Content-Type' : 'application/octet-stream' 
+    // 'Content-Length' : '1414' 
+}
 //upload script (work)
-// fs.readdir(filepath, (err, files)=>{
-//     if (err) {return err}
-    
-//     files.forEach((file)=>{
-//         minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
-//             if(err) { return console.log(err)}
-//             console.log('done : '+ file)
-//         })
-//     })
-// })
+fs.readdir(filepath, (err, files)=>{
+    if (err) {return err}
+    files.forEach((file)=>{
+        minioClient.fPutObject('khbucket', file, filepath.concat(file), metaData, (err,stream)=>{
+            if(err) { return console.log(err)}
+            console.log('done : '+ file)
+        })
+    })
+})
 
 // information script (work)
 // const listObj = minioClient.listObjects('khbucket','',true)
@@ -101,7 +72,8 @@ const minioClient = new Minio.Client({
 // })
 
 // slice object name 
-const listObj = minioClient.listObjects('khbucket','',true)
+
+const listObj = minioClient.listObjects('tolabucket','',true)
 listObj.on('data',(obj)=>{
     var namestr = obj.name 
     var sizeSave = obj.size
@@ -113,7 +85,7 @@ listObj.on('data',(obj)=>{
     var datestr = spl[0]
     var Desti = spl[1]
     var Host = spl[2]
-    console.log('Name :\t'+namestr+'\n lastModified\t'+lastM+'\n Size:\t'+sizeSave+'\n'+'Date :\t'+datestr+'\n Destination:\t'+Desti+'\n Host:\t'+Host)
+    console.log('Name :\t'+ namestr + '\n lastModified\t' + lastM + '\n Size:\t' + sizeSave +'\n'+'Date :\t'+ datestr+'\n Destination:\t'+Desti+'\n Host:\t'+Host)
     if(spl){
         FilePath.create({
             name : namestr,
@@ -142,8 +114,6 @@ listObj.on('data',(obj)=>{
             console.log(err)
         })
      }
-    
-
 })
 listObj.on('error',(e)=>{
     console.log(e)
@@ -151,15 +121,37 @@ listObj.on('error',(e)=>{
 
 
 app.get('/',(req,res)=>{
+    console.log('welcome to the application')
     res.json({
         message: 'Welcome to the application'
     })
 })
 
-const readApi = require('./routes/file.route')
-app.get('/read',(req,res)=>{ })
+// const readApi = require('./routes/file.route')
+// app.get('/files',readApi)
 
 require('./routes/file.route')(app)
+
+// app.route('./routes/file.route')
+//     .get('/files',(req,res)=>{
+//         console.log('success')
+//     })
+
+// const func = require('./routes/file.route')
+// func(app)
+// app.get('/files',(req,res)=>{
+//     res.send({
+//         message: 'success',
+//         data: data
+//     })
+// })
+
+// app.get('/files/:fileId',(req,res)=>{
+//     res.send({
+//         message: 'success',
+//         data: data
+//     })
+// })
 
 
 
